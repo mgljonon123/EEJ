@@ -1,0 +1,86 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @map("_id") @default(auto()) @db.ObjectId
+  email        String   @unique
+  name         String?
+  passwordHash String
+  role         Role     @default(DOCTOR)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+enum Role {
+  SUPERADMIN
+  DOCTOR
+}
+
+model Patient {
+  id        String   @id @map("_id") @default(auto()) @db.ObjectId
+  name      String
+  phone     String
+  email     String
+  age       Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  examinations MedicalExamination[]
+}
+
+model MedicalExamination {
+  id        String   @id @map("_id") @default(auto()) @db.ObjectId
+  patientId String   @db.ObjectId
+  patient   Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  surname                 String?
+  gender                  String?
+  chiefComplaint          String?
+  vod                     String?
+  vos                     String?
+  odSph                   String?
+  odCyl                   String?
+  odAxis                  String?
+  osSph                   String?
+  osCyl                   String?
+  osAxis                  String?
+  nearVisionOD            String?
+  nearVisionOS            String?
+  iop                     String?
+  eyeMovement             String?
+  eyeMovementDirection    String?
+  eyeMovementRestricted   String?
+  conjunctivaOD           String?
+  conjunctivaOS           String?
+  corneaOD                String?
+  corneaOS                String?
+  anteriorChamberOD       String?
+  anteriorChamberOS       String?
+  pupilOD                 String?
+  pupilOS                 String?
+  irisOD                  String?
+  irisOS                  String?
+  lensOD                  String?
+  lensOS                  String?
+  retinaOD                String?
+  retinaOS                String?
+  vitreousOD              String?
+  vitreousOS              String?
+  maculaOD                String?
+  maculaOS                String?
+  bloodVesselsOD          String?
+  bloodVesselsOS          String?
+  diagnosis               String?
+  recommendations         String?
+  followUp                String?
+  createdAt               DateTime @default(now())
+}
+
+
+
